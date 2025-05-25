@@ -1,5 +1,6 @@
 package com.example.schedulemanagement.repository;
 
+import com.example.schedulemanagement.dto.ScheduleFindRequestDto;
 import com.example.schedulemanagement.dto.ScheduleResponseDto;
 import com.example.schedulemanagement.entity.Schedule;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -55,6 +57,34 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
     }
 
     @Override
+    public List<ScheduleResponseDto> findAllSchedules(LocalDate updatedAt, String username) {
+        return jdbcTemplate.query(
+                "select s.* from schedule s join user u on s.user_id = u.id where DATE(s.updated_at) = ? and u.username = ? order by s.updated_at desc",
+                scheduleRowMapper(),
+                updatedAt,
+                username
+        );
+    }
+
+    @Override
+    public List<ScheduleResponseDto> findAllSchedules(LocalDate updatedAt) {
+        return jdbcTemplate.query(
+                "select * from schedule where DATE(updated_at) = ? order by updated_at desc",
+                scheduleRowMapper(),
+                updatedAt
+        );
+    }
+
+    @Override
+    public List<ScheduleResponseDto> findAllSchedules(String username) {
+        return jdbcTemplate.query(
+                "select s.* from schedule s join user u on s.user_id = u.id where u.username = ? order by s.updated_at desc",
+                scheduleRowMapper(),
+                username
+        );
+    }
+
+    @Override
     public Schedule findScheduleByIdOrElseThrow(Long id) {
         List<Schedule> result = jdbcTemplate.query("select * from schedule where id = ?", scheduleRowMapperV2(), id);
 
@@ -62,8 +92,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
     }
 
     @Override
-    public int updateSchedule(Long id, String title, String content) {
-        LocalDateTime now = LocalDateTime.now();
+    public int updateSchedule(Long id, String title, String content, LocalDateTime now) {
         return jdbcTemplate.update("update schedule set title = ?, content = ?, updated_at = ? where id = ?", title, content, now, id);
     }
 

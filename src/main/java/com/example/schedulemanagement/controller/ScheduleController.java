@@ -1,9 +1,6 @@
 package com.example.schedulemanagement.controller;
 
-import com.example.schedulemanagement.dto.ScheduleDeleteRequestDto;
-import com.example.schedulemanagement.dto.ScheduleRequestDto;
-import com.example.schedulemanagement.dto.ScheduleResponseDto;
-import com.example.schedulemanagement.dto.ScheduleUpdateRequestDto;
+import com.example.schedulemanagement.dto.*;
 import com.example.schedulemanagement.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +25,9 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public List<ScheduleResponseDto> findAllSchedules() {
-        return scheduleService.findAllSchedules();
+    public List<ScheduleResponseDto> findAllSchedules(@RequestBody ScheduleFindRequestDto scheduleFindRequestDto) {
+
+        return scheduleService.findAllSchedules(scheduleFindRequestDto);
     }
 
     @GetMapping("/{id}")

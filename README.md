@@ -4,8 +4,8 @@
 ## 1. Schedule API
 
 ### 1.1. Create Schedule
-- **API**: `POST /schedules`
-- **요청 본문(Request Body)**:
+- API: POST /schedules
+- 요청 본문(Request Body):
 ```
 {
   "userId": 1,
@@ -29,7 +29,37 @@
 
 ### 1.2. Get All Schedules
 - API: GET /schedules
-- 요청 본문: 없음
+- 요청 본문(Request Body):
+```
+{}
+```
+- 응답(Response):
+```
+[
+  {
+    "id": 2,
+    "userId": 2,
+    "title": "Another Title",
+    "content": "Another Content",
+    "createdAt": "2025-05-26T10:00:00",
+    "updatedAt": "2025-05-26T10:00:00"
+  },
+  {
+    "id": 1,
+    "userId": 1,
+    "title": "Sample Title",
+    "content": "Sample Content",
+    "createdAt": "2025-05-25T09:00:00",
+    "updatedAt": "2025-05-25T09:00:00"
+  }
+]
+```
+- 요청 본문(Request Body):
+```
+{
+    "updatedAt": "2025-05-25"
+}
+```
 - 응답(Response):
 ```
 [
@@ -40,14 +70,45 @@
     "content": "Sample Content",
     "createdAt": "2025-05-25T09:00:00",
     "updatedAt": "2025-05-25T09:00:00"
-  },
+  }
+]
+```
+- 요청 본문(Request Body):
+```
+{
+    "username": "name2"
+}
+```
+- 응답(Response):
+```
+[
   {
     "id": 2,
-    "userId": 1,
+    "userId": 2,
     "title": "Another Title",
     "content": "Another Content",
-    "createdAt": "2025-05-25T10:00:00",
-    "updatedAt": "2025-05-25T10:00:00"
+    "createdAt": "2025-05-26T10:00:00",
+    "updatedAt": "2025-05-26T10:00:00"
+  }
+]
+```
+- 요청 본문(Request Body):
+```
+{
+    "updatedAt": "2025-05-26",
+    "username": "name2"
+}
+```
+- 응답(Response):
+```
+[
+  {
+    "id": 2,
+    "userId": 2,
+    "title": "Another Title",
+    "content": "Another Content",
+    "createdAt": "2025-05-26T10:00:00",
+    "updatedAt": "2025-05-26T10:00:00"
   }
 ]
 ```

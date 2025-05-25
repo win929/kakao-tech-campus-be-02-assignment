@@ -1,9 +1,6 @@
 package com.example.schedulemanagement.service;
 
-import com.example.schedulemanagement.dto.ScheduleDeleteRequestDto;
-import com.example.schedulemanagement.dto.ScheduleRequestDto;
-import com.example.schedulemanagement.dto.ScheduleResponseDto;
-import com.example.schedulemanagement.dto.ScheduleUpdateRequestDto;
+import com.example.schedulemanagement.dto.*;
 import com.example.schedulemanagement.entity.Schedule;
 import com.example.schedulemanagement.entity.User;
 import com.example.schedulemanagement.repository.ScheduleRepository;
@@ -12,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -42,8 +40,27 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<ScheduleResponseDto> findAllSchedules() {
+    public List<ScheduleResponseDto> findAllSchedules(ScheduleFindRequestDto scheduleFindRequestDto) {
 
+        LocalDate localDate = scheduleFindRequestDto.getUpdatedAt();
+        String username = scheduleFindRequestDto.getUsername();
+
+        // localDate와 username이 모두 맞는 schedule을 찾는 로직
+        if (localDate != null && username != null) {
+            return scheduleRepository.findAllSchedules(localDate, username);
+        }
+
+        // localDate가 null인 경우 username으로만 필터링
+        if (localDate == null && username != null) {
+            return scheduleRepository.findAllSchedules(username);
+        }
+
+        // localDate가 null이 아닌 경우 해당 날짜의 모든 스케줄을 찾는 로직
+        if (localDate != null) {
+            return scheduleRepository.findAllSchedules(localDate);
+        }
+
+        // localDate와 username이 모두 null인 경우 모든 스케줄을 반환
         return scheduleRepository.findAllSchedules();
     }
 
@@ -70,7 +87,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
         User user = userRepository.findByUserIdOrElseThrow(schedule.getUserId());
 
-        int updatedRow = scheduleRepository.updateSchedule(id, title, content);
+        LocalDateTime now = LocalDateTime.now();
+
+        int updatedRow = scheduleRepository.updateSchedule(id, title, content, now);
         if (updatedRow == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found");
         }
@@ -82,7 +101,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         schedule.setTitle(title);
         schedule.setContent(content);
-        schedule.setUpdatedAt(LocalDateTime.now()); // 이거 어떡하지..
+        schedule.setUpdatedAt(now);
 
         return new ScheduleResponseDto(schedule);
     }
