@@ -1,3 +1,6 @@
+## ERD Diagram
+![ERD Diagram](https://github.com/win929/kakao-tech-campus-be-02-assignment/blob/main/ERD.png)
+
 ## 1. Schedule API
 
 ### 1.1. Create Schedule
