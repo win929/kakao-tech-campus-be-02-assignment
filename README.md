@@ -1,3 +1,5 @@
+Lv.3까지 완료했습니다.
+
 ## ERD Diagram
 ![ERD Diagram](https://github.com/win929/kakao-tech-campus-be-02-assignment/blob/main/ERD.png)
 
