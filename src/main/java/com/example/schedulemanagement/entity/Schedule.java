@@ -2,7 +2,6 @@ package com.example.schedulemanagement.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -25,11 +24,5 @@ public class Schedule {
         this.content = content;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-    }
-
-    public void update(String title, String content) {
-        this.title = title;
-        this.content = content;
-        this.updatedAt = LocalDateTime.now();
     }
 }

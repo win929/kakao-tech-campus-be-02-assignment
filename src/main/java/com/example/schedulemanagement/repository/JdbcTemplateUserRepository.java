@@ -34,12 +34,14 @@ public class JdbcTemplateUserRepository implements UserRepository {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("username", user.getUsername());
         parameters.put("password", user.getPassword());
+        parameters.put("email", user.getEmail());
 
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
         return new UserResponseDto(key.longValue(),
                 user.getUsername(),
-                user.getPassword());
+                user.getPassword(),
+                user.getEmail());
     }
 
     @Override
@@ -72,7 +74,8 @@ public class JdbcTemplateUserRepository implements UserRepository {
             public User mapRow(ResultSet rs, int rowNum) throws SQLException {
                 return new User(
                         rs.getString("username"),
-                        rs.getString("password")
+                        rs.getString("password"),
+                        rs.getString("email")
                 );
             }
         };
